@@ -24,6 +24,10 @@ export async function promptForChange(options: BeachballOptions) {
   const packageInfos = getPackageInfos(cwd);
   const packageGroups = getPackageGroups(packageInfos, options.path, options.groups);
 
+  // Check recent commit messages for structured conventional
+  // commits. If present, and --useConventionalCommits is set, fetch
+  // change type and description from the first available commit
+  // message.
   const fromConventionalCommits =
     (options.useConventionalCommits &&
       recentMessages.map(parseConventionalCommit).filter(<T>(obj: T | undefined): obj is T => !!obj)) ||
@@ -71,6 +75,7 @@ export async function promptForChange(options: BeachballOptions) {
       },
     };
 
+    // Only include structured commit messages that map to an allowed change type.
     const allowedConventionalCommit = fromConventionalCommits.find((c) => !disallowedChangeTypes?.includes(c.type));
     const showChangeTypePrompt = !options.type && !allowedConventionalCommit && changeTypePrompt.choices!.length > 1;
 
