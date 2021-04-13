@@ -18,6 +18,7 @@ export function getDefaultOptions() {
     package: '',
     changehint: 'Run "beachball change" to create a change file',
     type: null,
+    useConventionalCommits: false,
     fetch: true,
     version: false,
     disallowedChangeTypes: null,

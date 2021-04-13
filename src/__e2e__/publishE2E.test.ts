@@ -71,6 +71,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -138,6 +139,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -227,6 +229,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -319,6 +322,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -391,6 +395,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -468,6 +473,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -540,6 +546,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -619,6 +626,7 @@ describe('publish command (e2e)', () => {
       package: '',
       changehint: 'Run "beachball change" to create a change file',
       type: null,
+      useConventionalCommits: false,
       fetch: true,
       disallowedChangeTypes: null,
       defaultNpmTag: 'latest',
@@ -626,7 +634,7 @@ describe('publish command (e2e)', () => {
       bump: true,
       generateChangelog: true,
       hooks: {
-        postpublish: packagePath => {
+        postpublish: (packagePath) => {
           const packageJsonPath = path.join(packagePath, 'package.json');
           const packageJson = fs.readJSONSync(packageJsonPath);
           if (packageJson.afterPublish) {
