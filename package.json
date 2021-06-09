@@ -4,7 +4,7 @@
   "description": "The Sunniest Semantic Version Bumper",
   "repository": {
     "type": "git",
-    "url": "https://github.com/microsoft/beachball"
+    "url": "https://github.com/asmundg/beachball"
   },
   "license": "MIT",
   "main": "lib/index.js",
