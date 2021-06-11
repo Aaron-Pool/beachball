@@ -4,7 +4,7 @@ dist
 node_modules/
 .DS_Store
 lib/**/*.map
-lib/**/*.d.ts
-lib/**/*.d.ts
+lib/**/*.map.d.ts
+lib/**/*.test.d.ts
 lib/**/*.test.js
 package-lock.json
