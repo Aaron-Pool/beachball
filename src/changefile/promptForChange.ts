@@ -29,8 +29,10 @@ export async function promptForChange(options: BeachballOptions) {
   // change type and description from the first available commit
   // message.
   const fromConventionalCommits =
-    (options.useConventionalCommits &&
-      recentMessages.map(parseConventionalCommit).filter(<T>(obj: T | undefined): obj is T => !!obj)) ||
+    (options.conventionalCommits &&
+      recentMessages
+        .map(m => parseConventionalCommit(m, options))
+        .filter(<T>(obj: T | undefined): obj is T => !!obj)) ||
     [];
 
   for (let pkg of changedPackages) {
