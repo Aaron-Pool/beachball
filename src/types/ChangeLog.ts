@@ -3,7 +3,7 @@
  * Changes made to interfaces here can affect custom changelog rendering done by end-user.
  */
 
-import { ChangeType } from './ChangeInfo';
+import { ChangeAnnotations, ChangeType } from './ChangeInfo';
 
 export interface ChangelogEntry {
   /** Change comment */
@@ -14,6 +14,7 @@ export interface ChangelogEntry {
   commit: string;
   /** Package name the change was in */
   package: string;
+  annotations?: ChangeAnnotations
 }
 
 /**

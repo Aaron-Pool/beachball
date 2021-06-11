@@ -1,6 +1,6 @@
 import { ChangeInfo, ChangeSet } from '../types/ChangeInfo';
 import { PackageInfo } from '../types/PackageInfo';
-import { PackageChangelog } from '../types/ChangeLog';
+import { ChangelogEntry, PackageChangelog } from '../types/ChangeLog';
 import { generateTag } from '../tag';
 
 export function getPackageChangelogs(
@@ -29,12 +29,19 @@ export function getPackageChangelogs(
 
     changelogs[packageName].comments = changelogs[packageName].comments || {};
     changelogs[packageName].comments[change.type] = changelogs[packageName].comments[change.type] || [];
-    changelogs[packageName].comments[change.type]!.push({
+
+    const newEntry: ChangelogEntry = {
       comment: change.comment,
       author: change.email,
       commit: change.commit,
       package: packageName,
-    });
+    }
+
+    if (change.annotations && Object.keys(change.annotations).length > 0) {
+      newEntry.annotations = change.annotations;
+    }
+
+    changelogs[packageName].comments[change.type]!.push(newEntry);
   }
   return changelogs;
 }
