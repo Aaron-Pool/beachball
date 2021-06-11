@@ -1,6 +1,7 @@
 import { ChangeType } from './ChangeInfo';
 import { ChangeFilePromptOptions } from './ChangeFilePrompt';
 import { ChangelogOptions } from './ChangelogOptions';
+import { ConventionalCommitsOptions } from './ConventionalCommitsOptions';
 
 export type BeachballOptions = CliOptions & RepoOptions & PackageOptions;
 
@@ -25,14 +26,12 @@ export interface CliOptions {
   changehint: string;
   retries: number;
   type?: ChangeType | null;
-  conventionalCommits: boolean | {
-    types: Record<string, ChangeType>
-  };
   help?: boolean;
   version?: boolean;
   scope?: string[] | null;
   timeout?: number;
   fromRef?: string;
+  useConventionalCommits?: boolean,
   keepChangeFiles?: boolean;
   bump: boolean;
   canaryName?: string | undefined;
@@ -56,6 +55,7 @@ export interface RepoOptions {
   publish: boolean;
   bumpDeps: boolean;
   fetch: boolean;
+  conventionalCommits: boolean | ConventionalCommitsOptions;
   access: 'public' | 'restricted';
   changehint: string;
   disallowedChangeTypes: ChangeType[] | null;

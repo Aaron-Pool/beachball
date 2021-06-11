@@ -1,5 +1,5 @@
-import { BeachballOptions } from '../types/BeachballOptions';
 import { ChangeType } from '../types/ChangeInfo';
+import { ConventionalCommitsOptions } from '../types/ConventionalCommitsOptions';
 
 /**
  * 1. type
@@ -23,14 +23,13 @@ interface Change {
 
 export function parseConventionalCommit(
   commitMessage: string,
-  { conventionalCommits }: BeachballOptions
+  { types = {} }: ConventionalCommitsOptions
 ): Change | undefined {
   const match = commitMessage.match(COMMIT_RE);
   const data: ConventionalCommit | undefined = match
     ? { type: match[1], scope: match[2], breaking: !!match[3], message: match[4] }
     : undefined;
 
-  const types = conventionalCommits !== false && conventionalCommits !== true ? conventionalCommits.types : {};
   return data && map(data, types);
 }
 

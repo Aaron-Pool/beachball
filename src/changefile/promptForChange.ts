@@ -15,7 +15,9 @@ import { parseConventionalCommit } from './conventionalCommits';
  * Uses `prompts` package to prompt for change type and description, fills in git user.email and scope
  */
 export async function promptForChange(options: BeachballOptions) {
-  const { branch, path: cwd, package: specificPackage } = options;
+  const { branch, path: cwd, package: specificPackage, conventionalCommits, useConventionalCommits } = options;
+  const usesContentionalCommits = !!(conventionalCommits || useConventionalCommits);
+  const conventionalOptions = typeof conventionalCommits === 'object' ? conventionalCommits : {}
 
   const changedPackages = specificPackage ? [specificPackage] : getChangedPackages(options);
   const recentMessages = getRecentCommitMessages(branch, cwd) || [];
@@ -29,9 +31,9 @@ export async function promptForChange(options: BeachballOptions) {
   // change type and description from the first available commit
   // message.
   const fromConventionalCommits =
-    (options.conventionalCommits &&
+    (usesContentionalCommits &&
       recentMessages
-        .map(m => parseConventionalCommit(m, options))
+        .map(m => parseConventionalCommit(m, conventionalOptions))
         .filter(<T>(obj: T | undefined): obj is T => !!obj)) ||
     [];
 
