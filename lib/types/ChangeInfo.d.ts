@@ -1,4 +1,8 @@
 export declare type ChangeType = 'prerelease' | 'patch' | 'minor' | 'major' | 'none';
+export interface ChangeAnnotations {
+    scope?: string;
+    customType?: string;
+}
 /**
  * Info saved in each change file.
  */
@@ -8,6 +12,7 @@ export interface ChangeFileInfo {
     packageName: string;
     email: string;
     dependentChangeType?: ChangeType;
+    annotations?: ChangeAnnotations;
 }
 /**
  * Info saved in each change file, plus the commit hash.

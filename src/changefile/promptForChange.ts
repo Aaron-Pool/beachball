@@ -11,6 +11,12 @@ import { DefaultPrompt } from '../types/ChangeFilePrompt';
 import { getDisallowedChangeTypes } from './getDisallowedChangeTypes';
 import { parseConventionalCommit } from './conventionalCommits';
 
+const defaults = {
+  type: 'none' as ChangeType,
+  comment: '',
+  annotations: {}
+}
+
 /**
  * Uses `prompts` package to prompt for change type and description, fills in git user.email and scope
  */
@@ -80,7 +86,9 @@ export async function promptForChange(options: BeachballOptions) {
     };
 
     // Only include structured commit messages that map to an allowed change type.
-    const allowedConventionalCommit = fromConventionalCommits.find((c) => !disallowedChangeTypes?.includes(c.type));
+    const allowedConventionalCommit = fromConventionalCommits.find(
+      (c) => c.type && !disallowedChangeTypes?.includes(c.type)
+    );
     const showChangeTypePrompt = !options.type && !allowedConventionalCommit && changeTypePrompt.choices!.length > 1;
 
     const defaultPrompt: DefaultPrompt = {
@@ -96,13 +104,14 @@ export async function promptForChange(options: BeachballOptions) {
 
     questions = questions.filter((q) => !!q);
 
-    let response: { comment: string; type: ChangeType } = {
-      type: options.type || allowedConventionalCommit?.type || 'none',
-      comment: options.message || allowedConventionalCommit?.message || '',
+    let response: Partial<ChangeFileInfo> = {
+      type: options.type || allowedConventionalCommit?.type || defaults.type,
+      comment: options.message || allowedConventionalCommit?.comment || defaults.comment,
+      annotations: allowedConventionalCommit?.annotations ?? defaults.annotations
     };
 
     if (questions.length > 0) {
-      response = (await prompts(questions as prompts.PromptObject[])) as { comment: string; type: ChangeType };
+      response = (await prompts(questions as prompts.PromptObject[])) as Partial<ChangeFileInfo>;
 
       if (Object.keys(response).length === 0) {
         console.log('Cancelled, no change files are written');
@@ -129,13 +138,14 @@ export async function promptForChange(options: BeachballOptions) {
         response = { ...response, comment: options.message };
       }
 
-      if (!isValidChangeType(response.type)) {
+      if (!response.type || !isValidChangeType(response.type)) {
         console.error('Prompt response contains invalid change type.');
         return;
       }
     }
 
     packageChangeInfo[pkg] = {
+      ...defaults,
       ...response,
       packageName: pkg,
       email: getUserEmail(cwd) || 'email not defined',

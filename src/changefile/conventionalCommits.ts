@@ -1,4 +1,4 @@
-import { ChangeType } from '../types/ChangeInfo';
+import { ChangeAnnotations, ChangeFileInfo, ChangeType } from '../types/ChangeInfo';
 import { ConventionalCommitsOptions } from '../types/ConventionalCommitsOptions';
 
 /**
@@ -16,15 +16,10 @@ interface ConventionalCommit {
   message: string;
 }
 
-interface Change {
-  type: ChangeType;
-  message: string;
-}
-
 export function parseConventionalCommit(
   commitMessage: string,
   { types = {} }: ConventionalCommitsOptions
-): Change | undefined {
+): Partial<ChangeFileInfo> | undefined {
   const match = commitMessage.match(COMMIT_RE);
   const data: ConventionalCommit | undefined = match
     ? { type: match[1], scope: match[2], breaking: !!match[3], message: match[4] }
@@ -33,21 +28,27 @@ export function parseConventionalCommit(
   return data && map(data, types);
 }
 
-function map(d: ConventionalCommit, types: Record<string, ChangeType>): Change | undefined {
-  if (d.breaking) {
-    return { type: 'major', message: d.message };
+function map(d: ConventionalCommit, types: Record<string, ChangeType>): Partial<ChangeFileInfo> | undefined {
+  const annotations: ChangeAnnotations = {}
+  if (d.scope) {
+    annotations.scope = d.scope;
   }
 
-  const customType = types[d.type] ?? null;
-  if (customType) {
-    return { type: customType, message: d.message };
+  if (d.breaking) {
+    return { type: 'major', comment: d.message, annotations };
+  }
+
+  const mappedType = types[d.type] ?? null;
+  if (mappedType) {
+    annotations.customType = d.type;
+    return { type: mappedType, comment: d.message, annotations };
   }
 
   switch (d.type) {
     case 'fix':
     case 'chore':
-      return { type: 'patch', message: d.message };
+      return { type: 'patch', comment: d.message, annotations };
     case 'feat':
-      return { type: 'minor', message: d.message };
+      return { type: 'minor', comment: d.message, annotations };
   }
 }

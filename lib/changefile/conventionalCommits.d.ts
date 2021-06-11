@@ -1,9 +1,4 @@
-import { ChangeType } from '../types/ChangeInfo';
+import { ChangeFileInfo } from '../types/ChangeInfo';
 import { ConventionalCommitsOptions } from '../types/ConventionalCommitsOptions';
-interface Change {
-    type: ChangeType;
-    message: string;
-}
-export declare function parseConventionalCommit(commitMessage: string, { types }: ConventionalCommitsOptions): Change | undefined;
-export {};
+export declare function parseConventionalCommit(commitMessage: string, { types }: ConventionalCommitsOptions): Partial<ChangeFileInfo> | undefined;
 //# sourceMappingURL=conventionalCommits.d.ts.map
