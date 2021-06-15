@@ -3,6 +3,7 @@ export type ChangeType = 'prerelease' | 'patch' | 'minor' | 'major' | 'none';
 export interface ChangeAnnotations {
   scope?: string,
   customType?: string
+  display?: string
 }
 
 /**

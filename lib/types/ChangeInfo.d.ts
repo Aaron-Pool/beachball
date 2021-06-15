@@ -2,6 +2,7 @@ export declare type ChangeType = 'prerelease' | 'patch' | 'minor' | 'major' | 'n
 export interface ChangeAnnotations {
     scope?: string;
     customType?: string;
+    display?: string;
 }
 /**
  * Info saved in each change file.

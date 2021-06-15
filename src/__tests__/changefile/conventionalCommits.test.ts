@@ -7,7 +7,7 @@ describe.each<[string, ReturnType<typeof parseConventionalCommit>]>([
   ['perf(rendering): change', {
     type: 'patch',
     comment: 'change',
-    annotations: { scope: 'rendering', customType: 'perf' }
+    annotations: { scope: 'rendering', customType: 'perf', display: 'Performance Improvements' }
   }],
   ['refactor: change', { type: 'patch', comment: 'change' }],
   ['feat(scope): change', { type: 'minor', comment: 'change', annotations: { scope: 'scope' } }],
@@ -17,7 +17,7 @@ describe.each<[string, ReturnType<typeof parseConventionalCommit>]>([
 ])('parse(%s)', (s, expected) => {
   test('should parse correctly', () => expect(parseConventionalCommit(s, {
     types: {
-      perf: 'patch', refactor: 'patch'
+      perf: { changeType: 'patch', label: 'Performance Improvements' }, refactor: { changeType: 'patch', label: 'Refactors' }
     }
   })).toEqual(expected));
 });

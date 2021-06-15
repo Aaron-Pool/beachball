@@ -1,5 +1,5 @@
-import { ChangeAnnotations, ChangeFileInfo, ChangeType } from '../types/ChangeInfo';
-import { ConventionalCommitsOptions } from '../types/ConventionalCommitsOptions';
+import { ChangeAnnotations, ChangeFileInfo } from '../types/ChangeInfo';
+import { ConventionalCommitsOptions, ConventionalTypes } from '../types/ConventionalCommitsOptions';
 
 /**
  * 1. type
@@ -28,7 +28,7 @@ export function parseConventionalCommit(
   return data && map(data, types);
 }
 
-function map(d: ConventionalCommit, types: Record<string, ChangeType>): Partial<ChangeFileInfo> | undefined {
+function map(d: ConventionalCommit, types: ConventionalTypes): Partial<ChangeFileInfo> | undefined {
   const annotations: ChangeAnnotations = {}
   if (d.scope) {
     annotations.scope = d.scope;
@@ -40,8 +40,10 @@ function map(d: ConventionalCommit, types: Record<string, ChangeType>): Partial<
 
   const mappedType = types[d.type] ?? null;
   if (mappedType) {
+    const { changeType, label } = mappedType;
     annotations.customType = d.type;
-    return { type: mappedType, comment: d.message, annotations };
+    annotations.display = label ?? d.type;
+    return { type: changeType, comment: d.message, annotations };
   }
 
   switch (d.type) {
